@@ -1,48 +1,21 @@
+# 目录结构
 
-This directory is intended for project specific (private) libraries.
-PlatformIO will compile them to static libraries and link into executable file.
+## Infrared
 
-The source code of each library should be placed in a an own separate directory
-("lib/your_library_name/[here are source files]").
+驱动红外对管
 
-For example, see a structure of the following two libraries `Foo` and `Bar`:
+## Motor
 
-|--lib
-|  |
-|  |--Bar
-|  |  |--docs
-|  |  |--examples
-|  |  |--src
-|  |     |- Bar.c
-|  |     |- Bar.h
-|  |  |- library.json (optional, custom build options, etc) https://docs.platformio.org/page/librarymanager/config.html
-|  |
-|  |--Foo
-|  |  |- Foo.c
-|  |  |- Foo.h
-|  |
-|  |- README --> THIS FILE
-|
-|- platformio.ini
-|--src
-   |- main.c
+电机库
 
-and a contents of `src/main.c`:
-```
-#include <Foo.h>
-#include <Bar.h>
+## Servo
 
-int main (void)
-{
-  ...
-}
+舵机库
 
-```
+## Voice
 
-It should be noted that reference relationships cannot be formed between different libraries
+语音模块库
 
-PlatformIO Library Dependency Finder will find automatically dependent
-libraries scanning project source files.
+## Ultrasonic
 
-More information about PlatformIO Library Dependency Finder
-- https://docs.platformio.org/page/librarymanager/ldf.html
+超声波模块库
