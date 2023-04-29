@@ -8,5 +8,7 @@
 void Hardware_Init()
 {
     Serial_Init();
-    Servo_Init();
+    Serial1_Init();
+    Motor_Init();
+    Infrared_Init();
 }

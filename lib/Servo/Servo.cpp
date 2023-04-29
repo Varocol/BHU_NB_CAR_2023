@@ -6,9 +6,9 @@
  */
 int Servo_Angle2Pulse(int angle)
 {
-    angle = angle > CAR_MAX_ANGLE ? CAR_MAX_ANGLE : angle < CAR_MIN_ANGLE ? CAR_MIN_ANGLE
+    angle = angle > CAR_ANGLE_MAX ? CAR_ANGLE_MAX : angle < CAR_ANGLE_MIN ? CAR_ANGLE_MIN
                                                                           : angle;
-    return angle * 1.0 * (SERVO_MAX_PULSE - SERVO_MIN_PULSE) / (SERVO_MAX_ANGLE - SERVO_MIN_ANGLE) + SERVO_MIN_PULSE;
+    return angle * 1.0 * (SERVO_PULSE_MAX - SERVO_PULSE_MIN) / (SERVO_ANGLE_MAX - SERVO_ANGLE_MIN) + SERVO_PULSE_MIN;
 }
 
 /**
@@ -18,7 +18,7 @@ int Servo_Angle2Pulse(int angle)
  */
 int Servo_Pulse2Duty(int pulse)
 {
-    return pulse * (2 << SERVO_RESOLUTION) * SERVO_FREQUENCY / 1000000;
+    return pulse * 1.0 * (1 << SERVO_RESOLUTION) * SERVO_FREQUENCY / 1000000;
 }
 
 /**
@@ -30,13 +30,18 @@ void Servo_Init()
 {
     if (ledcSetup(SERVO_CHANNEL, SERVO_FREQUENCY, SERVO_RESOLUTION) == 0)
     {
-        Serial.println("舵机初始化失败");
+#ifdef CAR_DEBUG
+        Serial.println("[Servo] 舵机初始化失败");
+#endif
     }
     else
     {
-        ledcAttachPin(SERVO_PIN, SERVO_CHANNEL);
-        Serial.println("舵机初始化成功");
+#ifdef CAR_DEBUG
+        Serial.println("[Servo] 舵机初始化成功");
+#endif
     }
+    // 校正舵机
+    Servo_Turn(CAR_ANGLE_MIDDLLE);
 }
 
 /**
@@ -46,8 +51,21 @@ void Servo_Init()
  */
 void Servo_Turn(int angle)
 {
+    Servo_Start();
     ledcWrite(SERVO_CHANNEL, Servo_Pulse2Duty(Servo_Angle2Pulse(angle)));
-    Serial.printf("Servo turn %d °.\n", angle);
+#ifdef CAR_DEBUG
+    Serial.printf("[Servo] Servo turn %d°.\n", angle);
+#endif
+}
+
+/**
+ * @brief  舵机开启
+ * @param  None
+ * @retval None
+ */
+void Servo_Start()
+{
+    ledcAttachPin(SERVO_PIN, SERVO_CHANNEL);
 }
 
 /**
@@ -58,5 +76,8 @@ void Servo_Turn(int angle)
 void Servo_Stop()
 {
     ledcWrite(SERVO_CHANNEL, 0);
-    Serial.println("Servo Stoped.");
+    ledcDetachPin(SERVO_PIN);
+#ifdef CAR_DEBUG
+    Serial.println("[Servo] Servo Stoped.");
+#endif
 }
